@@ -1,0 +1,224 @@
+doctype html
+head
+    meta(charset='UTF-8')
+    meta(http-equiv='X-UA-Compatible' content='IE=edge')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    title Todo app dashboard
+    link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css' integrity='sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N' crossorigin='anonymous')
+    link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css')
+    script(src='https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js' integrity='sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj' crossorigin='anonymous')
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js' integrity='sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct' crossorigin='anonymous')
+    script(src='https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js' integrity='sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj' crossorigin='anonymous')
+    script(src='https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js' integrity='sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN' crossorigin='anonymous')
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js' integrity='sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+' crossorigin='anonymous')
+    // <script src="https://cdn.jsdelivr.net/jquery/1.12.4/jquery.min.js"></script>
+    script(src='https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js')
+    style
+        include ./Css/Dashboard.css
+
+script
+    include ./Js/Dashboard.js
+
+header.row.ml-auto.mr-auto.mt-2
+    nav.navbar.navbar-expand-lg.bg-primary.todo-nav
+        //
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+        .navbar-brand.nav-title
+            a(href='http://localhost:5000/dashboard')
+                img#logo-of-app.img.img-fluid(src='https://scontent.fsgn5-3.fna.fbcdn.net/v/t1.18169-9/12342346_1489652791343164_4251727350761917354_n.png?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=M36ZDdvK9tgAX9EGkcG&_nc_ht=scontent.fsgn5-3.fna&oh=00_AT_yPOw5NGh0IZVN72TViKym7Tq9Ma4rnKGhWIVttJaL4Q&oe=63093028' alt='logo')
+            h2#nav-saying-content hi someone
+        button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
+            i.bi.bi-toggles
+        #navbarSupportedContent.collapse.navbar-collapse
+            ul.navbar-nav
+                li.nav-item
+                    a(data-toggle='collapse' href='#collapseExample' role='button' aria-expanded='false' aria-controls='collapseExample')
+                        button.btn
+                            img#avata.img-fluid(src='http://creativeedtech.weebly.com/uploads/4/1/6/3/41634549/published/avatar.png?1487742111' alt='avata')
+                    #collapseExample.collapse
+                        .card.card-body
+                            a(href='http://localhost:5000/user/info') profile
+                            button.btn.btn-danger(type='button' data-toggle='modal' data-target='#logout-modal')
+                                i.bi.bi-box-arrow-right
+                            #logout-modal.modal.fade(role='dialog')
+                                .modal-dialog
+                                    .modal-content
+                                        .modal-header
+                                            button.close(type='button' data-dismiss='modal') &times;
+                                        .modal-body
+                                            h1 logout?
+                                            .row
+                                                .col-6
+                                                    button.btn.btn-success(type='button') yes
+                                                .col-6
+                                                    button.btn.btn-danger(type='button' data-dismiss='modal') no
+#attention.alert(role='alert')
+    button.close(type='button' data-dismiss='alert' aria-label='Close')
+        span(aria-hidden='true') &times;
+    p success delete + title
+.content.row
+    .col-lg-2.col-md-3.content-left
+        button#tooggleNavlef.btn.d-lg-none.d-md-none.d-sm-block.d-block.text-capitalize.text-white
+            i.bi.bi-arrow-down-circle-fill
+        .container.content-left-nav.d-none.d-md-block
+            p.content-left-nav-item.text-capitalize(data-target='#addModal' data-toggle='modal')
+                | add new
+            #addModal.modal
+                .modal-dialog
+                    .modal-content
+                        .modal-header
+                            h3 add new
+                            button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                span(aria-hidden='true') &times;
+                        .modal-body
+                            form#addNewJob
+                                .form-group
+                                    label.form-label(for='title') title
+                                    input#title.form-control(type='text' name='title')
+                                .form-group
+                                    label.form-label(for='content') content
+                                    textarea#content.form-control(name='content' cols='15' rows='7')
+                                .form-group
+                                    label.form-label(for='dateEnd') date end
+                                    input#dateEnd.form-control(type='date' name='dateEnd')
+                                .form-group.text-center.text-capitalize
+                                    button.btn.btn-primary(type='submit') add
+            p.content-left-nav-item.text-capitalize(href='#')
+            p#content-left-nav-menu sort by
+            ul
+                li
+                    a(href='#')
+                        p today
+                li
+                    a(href='#')
+                        p yesterday
+                li
+                    a(href='#')
+                        p this week
+            p
+            p.content-left-nav-item.text-capitalize
+                | share to me
+    .col-lg-10.col-md-9.col-sm-12.col-12.content-mid
+        h2.text-white list todo
+        .card.text-center.todo-item.todo-item-inprocess
+            .row.todo-item-head
+                .col-7.text-capitalize
+                    h3.card-title title
+                .col-2
+                    | createtor
+                .col-3
+                    p date create
+            .card-body.todo-item-body
+                .row.todo-item-content
+                    .col-12.text-left
+                        | content
+                .row.todo-item-control
+                    .col-5.text-right
+                        p#xtl1.todo-item-open see more
+                    .col-7.todo-item-bton
+                        // <a data-toggle="modal" data-target="#shareModal"><i class="bi bi-pencil-square"></i></a>
+                        i.bi.bi-share-fill(data-toggle='modal' data-target='#shareModal')
+                        i.bi.bi-pencil-square(data-toggle='modal' data-target='#editModal')
+                        i.bi.bi-x-circle-fill(data-toggle='modal' data-target='#deleteModal')
+                        i.bi.bi-check-circle-fill(data-toggle='modal' data-target='#checkModal')
+        .card.text-center.todo-item.todo-item-success
+            .row.todo-item-head
+                .col-7.text-capitalize
+                    h3.card-title title
+                .col-2
+                    | createtor
+                .col-3
+                    p date create
+            .card-body.todo-item-body
+                .row.todo-item-content
+                    .col-12.text-left
+                        | content
+                .row.todo-item-control
+                    .col-5.text-right
+                        p.todo-item-open see more
+                    .col-7.todo-item-bton
+                        i.bi.bi-share-fill
+                        i.bi.bi-pencil-square
+                        i.bi.bi-x-circle-fill
+                        i.bi.bi-check-circle-fill
+        .row.mt-5.mb-1
+            nav.m-auto(aria-label='Page navigation')
+                ul.pagination
+                    li.page-item
+                        a.page-link(href='#') Previous
+                    li.page-item
+                        a.page-link(href='#') 1
+                    li.page-item
+                        a.page-link(href='#') 2
+                    li.page-item
+                        a.page-link(href='#') 3
+                    li.page-item
+                        a.page-link(href='#') Next
+    #shareModal.modal
+        .modal-dialog
+            .modal-content
+                .modal-header
+                    h3.text-capitalize
+                        | share to
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    form#shareForm
+                        .form-group
+                            label.form-label(for='shareAccount') share to
+                            input#shareAccount.form-control(type='text' name='shareAccount')
+                        .form-group.text-center
+                            button#shareSubmit.btn.btn-success(type='button') share
+                            button.btn.btn-primary.choose-yes(type='button') done
+                    #listShare.text-center
+                        h2.text-capitalize list share
+    #editModal.modal
+        .modal-dialog
+            .modal-content
+                .modal-header.bg-warning
+                    h3.text-capitalize.text-white edit
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    form#editModalForm
+                        .form-group
+                            label.form-label(for='#title') title
+                            input#title.form-control(type='text' name='title')
+                        .form-group
+                            label.form-label(for='#content') content
+                            textarea#content.form-control(name='content' cols='15' rows='10')
+                        .form-group.text-center.text-capitalize
+                            button.btn.btn-success.choose-yes(type='submit') done
+                            button.btn.btn-danger(type='button' data-dismiss='modal' aria-label='close') out
+    #deleteModal.modal
+        .modal-dialog
+            .modal-content
+                .modal-header.bg-danger
+                    h3.text-capitalize.text-white delete this + title
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    form#editModalForm
+                        .form-group
+                            label.form-label(for='#title') title
+                            input#title.form-control(type='text' name='title' disabled='')
+                        .form-group
+                            label.form-label(for='#content') content
+                            textarea#content.form-control(name='content' cols='15' rows='10' disabled='')
+                .modal-footer.d-flex.justify-content-center
+                    button.btn.btn-success.text-capitalize.choose-yes(type='submit') done
+                    button.btn.btn-danger.text-capitalize(type='button' data-dismiss='modal' aria-label='close') out
+    #checkModal.modal
+        .modal-dialog
+            .modal-content
+                .modal-header.bg-danger
+                    h3.text-capitalize.text-white are you done!?
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-footer.d-flex.justify-content-center
+                    button.btn.btn-success.text-capitalize.choose-yes(type='button') yes
+                    button.btn.btn-danger.text-capitalize(type='button' data-dismiss='modal' aria-label='close') no
