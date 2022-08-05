@@ -1,7 +1,8 @@
-import express from 'express';
+import express, { response } from 'express';
 
-import UserController from './Controller/user.js';
+import UserController, { verifyMail } from './Controller/user.js';
 import postController from './Controller/post.js';
+import { checkverify } from './Midleware/checkVerify.js';
 
 const router = express.Router();
 
@@ -10,34 +11,31 @@ router.route('/')
     .get((req, res, next) => {
         res.render('login.pug');
     })
-.post(UserController.checkLogin)
+    .post(UserController.Login)
 
 router.route('/share/user/:id/')
-    .put(postController.changeShareList)
-    .post(postController.shareTo)
+    .put(checkverify ,postController.changeShareList)
+    .post(checkverify ,postController.shareTo)
 
 
 router.route('/user/:info')
-    .get(UserController.getUserInfomation)
-    .put(UserController.UpdateUserInfomation)
+    .get(checkverify ,UserController.getUserInfomation)
+    .post(checkverify ,UserController.changePass)
+    .put(checkverify ,UserController.UpdateUserInfomation)
     .delete(UserController.removeUser)
 
 router.route('/user')
-    .get((req, res, next) => {
-        res.render('Signup.pug');
-    })
+    .post(UserController.createUser)
 
 router.route('/forgotpass')
-    .get((req, res, next) => {
-        res.render('forgot.pug');
-    })
+    .post(UserController.forgotPassword)
 
-router.route('/dashboard')
+/* router.route('/dashboard')
     .get((req, res, next) => {
         res.render('dashboard.pug');
     })
-
-router.post('/pagi/:id/:page/:perpage', postController.pagination);
+ */
+router.get('/pagi/:id/:page/:perpage', postController.pagination);
 
 router.route('/post/:postinfo')
     .get(postController.getPost)
@@ -45,13 +43,12 @@ router.route('/post/:postinfo')
     .put(postController.modifiedPost)
     .delete(postController.removePost)
 
-router.get('/test', function (req, res, next) {
+/* router.get('/test', function (req, res, next) {
     res.render('login.pug');
-})
+}) */
 
-router.post('/test', function(req, res, next) {
-    res.send(req.query);
-})
+router.route('/user/status')
+    .put(checkverify, UserController.updateStatus)
 
 router.get('*', (req, res, next) => {
     res.send("not found!");
