@@ -16,9 +16,9 @@ const verifySchema = new Schema({
     expireAt: {
         type: Date,
         /* Defaults 7 days from now */
-        default: new Date(new Date()),
+        default: Date.now(),
         /* Remove doc 60 seconds after specified date */
-        expires: '5m'
+        expires: '15m'
     }
 }, { timestamps: true });
 

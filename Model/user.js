@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
+
 const UserSchema = new Schema({
     name: {
         type: String,
@@ -28,7 +29,7 @@ const UserSchema = new Schema({
         type: Boolean,
         required: true,
         default: false
-    }
+    },
 });
 
 const User = mongoose.model("User", UserSchema);

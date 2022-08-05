@@ -3,9 +3,10 @@ import User from "../Model/user.js";
 import * as bcrypt from 'bcrypt';
 import * as nodemailer from 'nodemailer';
 import Verify from "../Model/verify.js";
+import Token from "../Model/token.js";
+import jwt from 'jsonwebtoken';
 
-
-//const salt = 10;
+const salt = 10;
 
 export const verifyMail = (to, mess) => {
     const transporter = nodemailer.createTransport({
@@ -37,23 +38,69 @@ export const verifyMail = (to, mess) => {
 }
 
 const sercurityPass = async (pass) => {
-    const sal = await bcrypt.genSalt(process.env.SALT);
+    const sal = await bcrypt.genSalt(salt);
     const hash = await bcrypt.hash(pass, sal);
     //console.log(hash);
     return hash;
 }
 
-const checkVerify = async (id) => {
+export const jwtCheck = async (id, clientToken) => {
+    let check = await Token.findOne({ u_id: id });
+
+    if (check) {
+        if (check.token == clientToken) {
+            return true
+        } else {
+            return false
+        }
+    } else {
+        let token = await new Token({ u_id: id });
+        token.save();
+
+        return token;
+    }
+}
+
+/* const checkVerify = async (id) => {
     let verifyCheck = await Verify.find({ u_id: id });
 
     if (!verifyCheck)
         return false;
     else
         return true;
-}
+} */
 
 
 const Login = async (req, res, next) => {
+    console.log(req.body.email);
+    let user = await User.findOne({ email: req.body.email });
+    console.log(user);
+
+    try {
+        if (!user) {
+            res.sendStatus(404);
+        } else {
+            let pass = req.body.password;
+            console.log(pass);
+
+            let check = await bcrypt.compare(pass, user.password);
+            console.log(check);
+
+            if (check) {
+                console.log(200)
+                delete user.password;
+                res.status(200).send(user);
+            } else {
+                console.log(433)
+                res.sendStatus(433);
+            }
+        }
+    } catch (err) {
+        next(err)
+    }
+
+    //console.log(user.name)
+    //res.sendStatus(500);
 }
 
 const forgotPassword = async (req, res, next) => {
@@ -124,9 +171,14 @@ const createUser = async (req, res, next) => {
         let verify = new Verify({ u_id: user.id });
         await verify.save();
 
-        let code = verify.code;
+        //console.log(verify);
 
-        console.log(code);
+        let code = verify.code;
+        //await jwtCheck(user._id);
+        let token = new Token({ u_id: user.id });
+        await token.save()
+
+        //console.log(token);
 
         let mailsending = {
             subject: "confirm email",
@@ -136,7 +188,7 @@ const createUser = async (req, res, next) => {
 
         verifyMail(data.email, mailsending);
 
-        res.sendStatus(200);
+        res.status(200).send(token);
     } catch (err) {
         next(err);
         res.sendStatus(500);

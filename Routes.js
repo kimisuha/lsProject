@@ -1,8 +1,9 @@
 import express, { response } from 'express';
 
-import UserController, { verifyMail } from './Controller/user.js';
+import UserController, { jwtCheck, verifyMail } from './Controller/user.js';
 import postController from './Controller/post.js';
 import { checkverify } from './Midleware/checkVerify.js';
+
 
 const router = express.Router();
 
@@ -14,14 +15,14 @@ router.route('/')
     .post(UserController.Login)
 
 router.route('/share/user/:id/')
-    .put(checkverify ,postController.changeShareList)
-    .post(checkverify ,postController.shareTo)
+    .put(checkverify, postController.changeShareList)
+    .post(checkverify, postController.shareTo)
 
 
 router.route('/user/:info')
-    .get(checkverify ,UserController.getUserInfomation)
-    .post(checkverify ,UserController.changePass)
-    .put(checkverify ,UserController.UpdateUserInfomation)
+    .get(checkverify, UserController.getUserInfomation)
+    .post(checkverify, UserController.changePass)
+    .put(checkverify, UserController.UpdateUserInfomation)
     .delete(UserController.removeUser)
 
 router.route('/user')
@@ -37,15 +38,22 @@ router.route('/forgotpass')
  */
 router.get('/pagi/:id/:page/:perpage', postController.pagination);
 
+router.get('/test', async function(req, res, next){
+    //console.log(req);
+    
+    let test = req;
+    console.log(test)
+
+    //res.send(test);
+})
+
 router.route('/post/:postinfo')
     .get(postController.getPost)
     .post(postController.createPost)
     .put(postController.modifiedPost)
     .delete(postController.removePost)
 
-/* router.get('/test', function (req, res, next) {
-    res.render('login.pug');
-}) */
+
 
 router.route('/user/status')
     .put(checkverify, UserController.updateStatus)

@@ -2,7 +2,8 @@ import express from 'express'
 import mongoose from 'mongoose'
 import cors from 'cors'
 import bodyParser from 'body-parser'
-import dotenv from 'dotenv';
+import dotenv from 'dotenv'
+import cookieParser from 'cookie-parser'
 
 import router from './Routes.js'
 
@@ -11,10 +12,11 @@ const app = express()
 
 const port = process.env.PORT || 5000
 
-app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(cookieParser(process.env.COOKIE))
 
 dotenv.config();
 try {
@@ -27,21 +29,20 @@ try {
     console.log(error);
 }
 
-//app.set("view engine", "pug");
+const list = process.env.PAGE_LISTEN ? process.env.PAGE_LISTEN.split(',') : []
+/* 
+const option = {
+    origin: (origin, callback) => {
+        if (!origin || list.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error("not available"));
+        }
+    },
+    Credential: true
+}; */
 
-/* app.get('/ex', async function (req, res, next) {
-    try {
-        let ex = new Verify({
-            u_id: "62eb82940f3f6f08ac59d3f0"
-        });
-
-        await ex.save();
-        res.send("ok");
-    } catch (err) {
-        next(err);
-    }
-}) */
-
+app.use(cors());
 
 app.use(router);
 
