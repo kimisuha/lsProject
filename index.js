@@ -6,6 +6,7 @@ import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
 
 import router from './Routes.js'
+import { passportStragety } from './passportStragety.js'
 
 
 const app = express()
@@ -17,8 +18,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cookieParser(process.env.COOKIE))
+//app.use(passportStragety);
 
 dotenv.config();
+
+
 try {
     mongoose.connect(process.env.MONGODBLINK, {
         useNewUrlParser: true,
@@ -41,6 +45,7 @@ const option = {
     },
     Credential: true
 }; */
+
 
 app.use(cors());
 

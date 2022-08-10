@@ -19,10 +19,22 @@ const postSchema = new Schema({
         required: true,
         type: mongoose.Schema.Types.ObjectId,
     },
+    dayend: {
+        type: Date,
+        required: true,
+        default: new Date()
+    },
+    status: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     sharelist: [{
-        type: mongoose.Schema.Types.ObjectId
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
     }]
 });
+
 
 const Post = mongoose.model('Post', postSchema);
 

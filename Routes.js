@@ -1,27 +1,54 @@
 import express, { response } from 'express';
 
-import UserController, { jwtCheck, verifyMail } from './Controller/user.js';
+import UserController from './Controller/user.js';
 import postController from './Controller/post.js';
 import { checkverify } from './Midleware/checkVerify.js';
+import passport from 'passport';
+import passportjwt from 'passport-jwt';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 
 const router = express.Router();
 
 
+const strag = passportjwt.Strategy;
+const extractJwt = passportjwt.ExtractJwt;
+
+const checklog = passport.authenticate('jwt', {
+    session: false,
+});
+
+
+passport.use(new strag({
+    jwtFromRequest: extractJwt.fromAuthHeaderAsBearerToken('Authorization'),
+    secretOrKey: process.env.JWT_TOKEN
+}, (payload, done) => {
+    try {
+        //console.log(payload);
+        done(false, payload);
+    } catch (err) {
+        console.log(err);
+        done(false, err);
+    }
+}))
+
 router.route('/')
-    .get((req, res, next) => {
-        res.render('login.pug');
+    .get(checklog, (req, res, next) => {
+        res.sendStatus(200);
     })
     .post(UserController.Login)
 
 router.route('/share/user/:id/')
-    .put(checkverify, postController.changeShareList)
-    .post(checkverify, postController.shareTo)
+    .get(checklog, postController.getShareList)
+    .put(checklog, postController.changeShareList)
+    .post(checklog, postController.shareTo)
 
 
 router.route('/user/:info')
-    .get(checkverify, UserController.getUserInfomation)
-    .post(checkverify, UserController.changePass)
+    .get([checklog, checkverify], UserController.getUserInfomation)
+    .post([checklog, checkverify], UserController.changePass)
     .put(checkverify, UserController.UpdateUserInfomation)
     .delete(UserController.removeUser)
 
@@ -31,26 +58,21 @@ router.route('/user')
 router.route('/forgotpass')
     .post(UserController.forgotPassword)
 
-/* router.route('/dashboard')
-    .get((req, res, next) => {
-        res.render('dashboard.pug');
-    })
- */
-router.get('/pagi/:id/:page/:perpage', postController.pagination);
+router.get('/pagi/:info/:page/:perpage', [checklog], postController.pagination);
 
-router.get('/test', async function(req, res, next){
+/* router.get('/test', async function (req, res, next) {
     //console.log(req);
-    
+
     let test = req;
     console.log(test)
 
     //res.send(test);
 })
-
-router.route('/post/:postinfo')
-    .get(postController.getPost)
-    .post(postController.createPost)
-    .put(postController.modifiedPost)
+ */
+router.route('/post')
+    .get([checklog, checkverify], postController.getPost)
+    .post([checklog], postController.createPost)
+    .put([checklog], postController.modifiedPost)
     .delete(postController.removePost)
 
 
@@ -58,12 +80,16 @@ router.route('/post/:postinfo')
 router.route('/user/status')
     .put(checkverify, UserController.updateStatus)
 
+router.post('/check', checklog, postController.checkStatus)
+
+router.get('/sort/:sort', postController.sortBy);
+
+router.route('/filter/:filter')
+    .post(checklog, postController.filter)
+
 router.get('*', (req, res, next) => {
     res.send("not found!");
 })
-
-
-
 
 
 export default router;
