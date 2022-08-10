@@ -66,6 +66,27 @@ const createToken = (user) => {
     return token;
 }
 
+const getUser = async (req, res, next) => {
+    console.log('header', req.headers.id);
+    try {
+        if (req.headers.id != null) {
+            let user = await User.findById(req.headers.id).then((user) => {
+                return user.name;
+            });
+            if (!user)
+                res.sendStatus(404);
+            else
+                res.status(200).send(user);
+        }
+        else
+            res.sendStatus(404);
+    } catch (err) {
+        console.log(err);
+        next(err);
+        res.sendStatus(500);
+    }
+}
+
 
 const Login = async (req, res, next) => {
     // console.log(req.body.email);
@@ -309,7 +330,8 @@ const UserController = {
     getUserInfomation,
     forgotPassword,
     changePass,
-    updateStatus
+    updateStatus,
+    getUser
 };
 
 export default UserController;

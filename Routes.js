@@ -35,9 +35,7 @@ passport.use(new strag({
 }))
 
 router.route('/')
-    .get(checklog, (req, res, next) => {
-        res.sendStatus(200);
-    })
+    .get(checklog, UserController.getUser)
     .post(UserController.Login)
 
 router.route('/share/user/:id/')
@@ -60,15 +58,6 @@ router.route('/forgotpass')
 
 router.get('/pagi/:info/:page/:perpage', [checklog], postController.pagination);
 
-/* router.get('/test', async function (req, res, next) {
-    //console.log(req);
-
-    let test = req;
-    console.log(test)
-
-    //res.send(test);
-})
- */
 router.route('/post')
     .get([checklog, checkverify], postController.getPost)
     .post([checklog], postController.createPost)
@@ -82,7 +71,7 @@ router.route('/user/status')
 
 router.post('/check', checklog, postController.checkStatus)
 
-router.get('/sort/:sort', postController.sortBy);
+router.get('/sort/:sort', checklog, postController.sortBy);
 
 router.route('/filter/:filter')
     .post(checklog, postController.filter)
